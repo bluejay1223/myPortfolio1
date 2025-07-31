@@ -1,5 +1,5 @@
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { Routes, Route, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import './App.css';
 import AboutMe from './pages/AboutMe';
 import Education from './pages/Education';
@@ -25,7 +25,7 @@ const SEARCH_SECTIONS = [
     label: 'Education',
     path: '/education',
     keywords: [
-      'school', 'university', 'degree', 'study', 'UNC', 'Chapel Hill', 'NCSU', 'North Carolina State', 'Panther Creek', 'GPA', 'Data Science', 'Computer Science', 'Dean’s list', 'Cary', 'Raleigh', 'High School',
+      'school', 'university', 'degree', 'study', 'UNC', 'Chapel Hill', 'NCSU', 'North Carolina State', 'Panther Creek', 'GPA', 'Data Science', 'Computer Science', 'Dean\'s list', 'Cary', 'Raleigh', 'High School',
     ],
   },
   {
@@ -63,7 +63,7 @@ function DropdownMenu() {
         <ul className="dropdown-list">
           {SECTIONS.filter(s => s.path !== location.pathname).map(s => (
             <li key={s.path}>
-              <a href={s.path} className="dropdown-link">{s.label}</a>
+              <Link to={s.path} className="dropdown-link">{s.label}</Link>
             </li>
           ))}
         </ul>
@@ -84,7 +84,8 @@ function Header() {
             .filter(k => k.toLowerCase().includes(query.toLowerCase()))
             .map(k => ({ section, keyword: k }))
         );
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === '/' || location.pathname === '/myPortfolio1/' || location.pathname === '/myPortfolio1';
+  
   return (
     <header className="site-header">
       <div className={isHome ? 'header-row home-header-row' : 'header-row'}>
@@ -125,9 +126,9 @@ function Home() {
   return (
     <div className="main-menu">
       {SECTIONS.map((block) => (
-        <a className="menu-block" href={block.path} key={block.label}>
+        <Link className="menu-block" to={block.path} key={block.label}>
           {block.label}
-        </a>
+        </Link>
       ))}
     </div>
   );
@@ -139,6 +140,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/myPortfolio1/" element={<Home />} />
+        <Route path="/myPortfolio1" element={<Home />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/education" element={<Education />} />
         <Route path="/experience-projects" element={<ExperienceProjects />} />

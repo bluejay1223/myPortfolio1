@@ -136,6 +136,8 @@ main {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .menu-block {
@@ -162,6 +164,7 @@ main {
   box-shadow: 0 8px 32px rgba(79,70,229,0.18), 0 3px 16px rgba(0,0,0,0.08);
   background: linear-gradient(120deg, #e0e7ff 60%, #f7f8fa 100%);
   color: #222;
+  text-decoration: none;
 }
 
 .section-page {
