@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0; url=/myPortfolio1/" />
+  </head>
+  <body>
+    <script>
+      // Redirect all requests to index.html for React Router
+      var l = window.location;
+      var path = l.pathname.replace(/^\/myPortfolio1\//, '');
+      window.location.replace('/myPortfolio1/' + (path ? '#' + path : ''));
+    </script>
+  </body>
+</html>
