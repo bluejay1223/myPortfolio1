@@ -6,6 +6,8 @@ import Education from './pages/Education';
 import ExperienceProjects from './pages/ExperienceProjects';
 import Favorites from './pages/Favorites';
 import Places from './pages/Places';
+import ProtectedAnalytics from './components/ProtectedAnalytics';
+import { AnalyticsProvider, useAnalytics } from './contexts/AnalyticsContext';
 
 const SECTIONS = [
   { label: 'About Me', path: '/about' },
@@ -54,16 +56,30 @@ const SEARCH_SECTIONS = [
 function DropdownMenu() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const { trackClick } = useAnalytics();
+  
   return (
     <div className="dropdown-menu-container" onMouseLeave={() => setOpen(false)}>
-      <button className="dropdown-toggle" onClick={() => setOpen((v) => !v)}>
+      <button 
+        className="dropdown-toggle" 
+        onClick={() => {
+          setOpen((v) => !v);
+          trackClick('dropdown-toggle');
+        }}
+      >
         ☰
       </button>
       {open && (
         <ul className="dropdown-list">
           {SECTIONS.filter(s => s.path !== location.pathname).map(s => (
             <li key={s.path}>
-              <Link to={s.path} className="dropdown-link">{s.label}</Link>
+              <Link 
+                to={s.path} 
+                className="dropdown-link"
+                onClick={() => trackClick(`nav-${s.label.toLowerCase().replace(/\s+/g, '-')}`)}
+              >
+                {s.label}
+              </Link>
             </li>
           ))}
         </ul>
@@ -76,6 +92,8 @@ function Header() {
   const location = useLocation();
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  const { trackClick } = useAnalytics();
+  
   const results =
     query.trim() === ''
       ? []
@@ -107,6 +125,7 @@ function Header() {
                     onClick={() => {
                       setQuery('');
                       navigate(section.path);
+                      trackClick(`search-result-${section.label.toLowerCase().replace(/\s+/g, '-')}`);
                     }}
                   >
                     {section.label} <span className="search-keyword">({keyword})</span>
@@ -123,20 +142,38 @@ function Header() {
 }
 
 function Home() {
+  const { trackClick } = useAnalytics();
+  
   return (
     <div className="main-menu">
       {SECTIONS.map((block) => (
-        <Link className="menu-block" to={block.path} key={block.label}>
+        <Link 
+          className="menu-block" 
+          to={block.path} 
+          key={block.label}
+          onClick={() => trackClick(`home-menu-${block.label.toLowerCase().replace(/\s+/g, '-')}`)}
+        >
           {block.label}
         </Link>
       ))}
+      {/* Admin link */}
+      <div className="admin-link-container">
+        <p className="admin-hint">Admin access:</p>
+        <Link 
+          to="/analytics" 
+          className="admin-link"
+          onClick={() => trackClick('admin-analytics-access')}
+        >
+          Analytics Dashboard
+        </Link>
+      </div>
     </div>
   );
 }
 
 function App() {
   return (
-    <>
+    <AnalyticsProvider>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -147,8 +184,9 @@ function App() {
         <Route path="/experience-projects" element={<ExperienceProjects />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/places" element={<Places />} />
+        <Route path="/analytics" element={<ProtectedAnalytics />} />
       </Routes>
-    </>
+    </AnalyticsProvider>
   );
 }
 

@@ -454,3 +454,40 @@ main {
   justify-content: flex-start !important;
   gap: 0 !important;
 }
+
+/* Admin link styles */
+.admin-link-container {
+  position: relative;
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.admin-hint {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+}
+
+.admin-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #f8f9fa;
+  color: #666;
+  text-decoration: none;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-top: 5px;
+}
+
+.admin-link:hover {
+  background: #e9ecef;
+  color: #495057;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+}
