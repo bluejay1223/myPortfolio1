@@ -226,4 +226,102 @@
   .analytics-header h1 {
     font-size: 1.8rem;
   }
+}
+
+/* Timestamp Log Styles */
+.timestamp-log {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.log-table {
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.log-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.log-entries {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f3f4;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.log-entry:hover {
+  background-color: #f8f9fa;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-time {
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+}
+
+.log-page {
+  color: #495057;
+  font-weight: 500;
+}
+
+.log-session {
+  color: #6c757d;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Responsive design for timestamp log */
+@media (max-width: 768px) {
+  .log-header,
+  .log-entry {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 15px;
+  }
+  
+  .log-header {
+    display: none;
+  }
+  
+  .log-entry {
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  
+  .log-entry::before {
+    content: attr(data-time);
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+  }
 } 

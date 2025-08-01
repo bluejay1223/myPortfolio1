@@ -229,6 +229,29 @@ const Analytics = () => {
     };
   };
 
+  const processTimestampLog = () => {
+    if (!analyticsData?.pageViews) return [];
+    
+    // Get the first entry for each session (when they first entered the website)
+    const firstEntries = analyticsData.pageViews
+      .filter(view => view.page !== '/analytics') // Exclude analytics page
+      .reduce((acc, view) => {
+        if (!acc[view.session_id] || new Date(view.timestamp) < new Date(acc[view.session_id].timestamp)) {
+          acc[view.session_id] = view;
+        }
+        return acc;
+      }, {});
+
+    return Object.values(firstEntries)
+      .map(view => ({
+        ...view,
+        formattedTime: format(new Date(view.timestamp), 'MMM dd, yyyy HH:mm:ss'),
+        pageName: view.page === '/' ? 'Home' : view.page.replace('/', '').replace('-', ' ')
+      }))
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Most recent first
+      .slice(0, 50); // Show last 50 entries
+  };
+
   if (loading) {
     return (
       <div className="analytics-container">
@@ -250,6 +273,7 @@ const Analytics = () => {
   const timeSpent = processTimeSpent();
   const clickEvents = processClickEvents();
   const dailyViews = processDailyViews();
+  const timestampLog = processTimestampLog();
 
   return (
     <div className="analytics-container">
@@ -411,6 +435,32 @@ const Analytics = () => {
               }
             }}
           />
+        </div>
+
+        <div className="chart-container">
+          <h2>Website Entry Log</h2>
+          <div className="timestamp-log">
+            {timestampLog.length > 0 ? (
+              <div className="log-table">
+                <div className="log-header">
+                  <span className="log-time">Timestamp</span>
+                  <span className="log-page">Page</span>
+                  <span className="log-session">Session ID</span>
+                </div>
+                <div className="log-entries">
+                  {timestampLog.map((entry, index) => (
+                    <div key={entry.id || index} className="log-entry">
+                      <span className="log-time">{entry.formattedTime}</span>
+                      <span className="log-page">{entry.pageName}</span>
+                      <span className="log-session">{entry.session_id.substring(0, 8)}...</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="no-data">No entries recorded yet.</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
