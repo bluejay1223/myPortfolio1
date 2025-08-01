@@ -1,5 +1,4 @@
 -- Supabase Analytics Setup Script
--- Run this in your Supabase SQL Editor
 
 -- Create page_views table
 CREATE TABLE IF NOT EXISTS page_views (
